@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ARQD.ECK · Arquitectura Introspectiva Global</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050a0f;
+            color: #eef2f5;
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f1a24;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+
+        /* Navegación glass */
+        .glass-nav {
+            background: rgba(5, 10, 15, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(59,130,246,0.3);
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo span {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #64748b;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+        .btn-glass {
+            background: rgba(59,130,246,0.15);
+            border: 1px solid rgba(59,130,246,0.5);
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: radial-gradient(circle at 10% 20%, #0b1620, #03070c);
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #60a5fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .badge {
+            background: #0f2b3d;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            color: #93c5fd;
+            margin: 1rem 0;
+        }
+        .price-chip {
+            background: #1e293b;
+            border: 1px solid #f59e0b;
+            color: #fbbf24;
+            padding: 0.5rem 1.5rem;
+            border-radius: 3rem;
+            font-weight: 800;
+            display: inline-block;
+            margin: 1rem auto;
+        }
+
+        /* Contenedores */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Grid de proyectos (8 imágenes) */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .project-card {
+            background: #0f172a;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: #3b82f6;
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
+        }
+        .project-img {
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            background-color: #1e2a3a;
+            transition: transform 0.5s;
+        }
+        .project-card:hover .project-img {
+            transform: scale(1.02);
+        }
+        .project-info {
+            padding: 1.5rem;
+        }
+        .project-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Estadísticas */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 2rem;
+            border-radius: 2rem;
+            margin: 2rem 0;
+            border: 1px solid #1e293b;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        /* Tarjetas de servicios y tecnología */
+        .services-grid, .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .service-card, .tech-card {
+            background: #0f172a;
+            padding: 1.8rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            border: 1px solid #1e293b;
+            transition: 0.2s;
+        }
+        .service-card:hover, .tech-card:hover {
+            border-color: #3b82f6;
+        }
+
+        /* Testimonios */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .testimonial {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border-left: 4px solid #f59e0b;
+        }
+
+        /* Contacto y redes */
+        .contact-section {
+            background: linear-gradient(145deg, #0b1220, #050a12);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            text-align: center;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .social-icon {
+            background: #1e293b;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            transition: 0.2s;
+            text-decoration: none;
+            color: white;
+        }
+        .social-icon:hover {
+            background: #3b82f6;
+            transform: scale(1.08);
+        }
+
+        /* Botones y formularios */
+        button, .btn {
+            background: #3b82f6;
+            border: none;
+            padding: 0.75rem 1.8rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover, .btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Generador IA */
+        .ai-card {
+            background: #0a101e;
+            border-radius: 2rem;
+            padding: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #1e293b;
+            color: #5f6c84;
+        }
+
+        /* Botón flotante WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: 0.2s;
+            z-index: 99;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background: #128C7E;
+        }
+
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 2rem; }
+            .glass-nav { flex-direction: column; }
+            .container { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navegación -->
+<div class="glass-nav">
+    <div class="logo">ARQD.ECK <span>· introspective architecture</span></div>
+    <div class="nav-links">
+        <a href="#proyectos">Proyectos</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#testimonios">Casos</a>
+        <a href="#tecnologia">Tecnología</a>
+        <a href="#contacto">Contacto</a>
+        <a href="#ai-tools" class="btn-glass">IA Studio</a>
+    </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="badge">🧠 estudio global · fundado 2025</div>
+    <h1>Arquitectura que nace<br>desde adentro</h1>
+    <p style="max-width: 650px; margin: 1rem auto;">+180 proyectos · 14 países · Diseño emocional, técnico y antisísmico</p>
+    <div class="price-chip">✨ Plano base profesional → 20 USD</div>
+    <div style="margin-top: 1.5rem;">
+        <a href="#contacto" class="btn" style="text-decoration:none;">COMENZAR PROYECTO</a>
+    </div>
+</section>
+
+<!-- Proyectos destacados (8 imágenes) -->
+<div class="container" id="proyectos">
+    <h2 class="section-title">📐 Proyectos destacados</h2>
+    <div class="projects-grid">
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Loft Calma · Chile</h3><p>90m², hormigón visto, flujo introspectivo.</p></div></div>
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Anti-sísmico · Turquía</h3><p>Estructura enclavada, normativa local.</p></div></div>
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1565182999561-18d7dc61e0de?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Eco Modular · Brasil</h3><p>Contenedor, montaje con grúa.</p></div></div>
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Residence · Texas, USA</h3><p>220m², climatización pasiva.</p></div></div>
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Yoga Studio · India</h3><p>Espacios de meditación.</p></div></div>
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Casa Abierta · Argentina</h3><p>7x12, cocina integrada.</p></div></div>
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Villa Mediterránea · España</h3><p>Patio interior, luz cenital.</p></div></div>
+        <div class="project-card"><div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=600&h=400&fit=crop');"></div><div class="project-info"><h3>Refugio · Patagonia</h3><p>Estructura de madera y acero.</p></div></div>
+    </div>
+</div>
+
+<!-- Estadísticas y Servicios -->
+<div class="container" id="servicios">
+    <div class="stats">
+        <div class="stat-item"><div class="stat-number">180+</div><div>planos entregados</div></div>
+        <div class="stat-item"><div class="stat-number">14</div><div>países</div></div>
+        <div class="stat-item"><div class="stat-number">3 días</div><div>borrador</div></div>
+        <div class="stat-item"><div class="stat-number">$20</div><div>USD · base</div></div>
+    </div>
+    <div class="services-grid">
+        <div class="service-card"><h3>📘 Plano base</h3><p>PDF con medidas, orientación solar, distribución. Borrador en 72h.<br><strong style="color:#fbbf24;">$20 USD</strong></p></div>
+        <div class="service-card"><h3>🏗️ Legajo técnico</h3><p>Estructuras (hormigón enclavado/acero), instalaciones, cómputos, análisis sísmico.</p><p style="color:#fbbf24;">Presupuesto personalizado</p></div>
+        <div class="service-card"><h3>🤖 AI Studio</h3><p>Generador de posts para Instagram/LinkedIn con IA. Texto profesional + hashtags.</p></div>
+    </div>
+</div>
+
+<!-- Testimonios -->
+<div class="container" id="testimonios">
+    <h2 class="section-title">🌍 Clientes internacionales</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial"><strong>⭐ Mustafa (Turquía)</strong><br>"Primer proyecto, muy importante. Entendieron mis necesidades sísmicas."</div>
+        <div class="testimonial"><strong>⭐ Isabela (Brasil)</strong><br>"Transformé mi idea en un plano real. Cozinha americana, todo perfecto."</div>
+        <div class="testimonial"><strong>⭐ Ahmed (Internacional)</strong><br>"Introspective architecture made my house feel like home."</div>
+        <div class="testimonial"><strong>⭐ Priya (India)</strong><br>"Entendieron el clima y la cultura. Plano adaptado a normativa local."</div>
+    </div>
+</div>
+
+<!-- Tecnología -->
+<div class="container" id="tecnologia">
+    <h2 class="section-title">🔧 Innovación técnica</h2>
+    <div class="tech-grid">
+        <div class="tech-card">🧱 Hormigón enclavado</div>
+        <div class="tech-card">📐 Análisis sísmico (Turquía, India)</div>
+        <div class="tech-card">🤖 IA para generación de textos</div>
+        <div class="tech-card">📦 Diseño para prefabricado y grúa</div>
+        <div class="tech-card">🌡️ Orientación solar + eficiencia</div>
+        <div class="tech-card">🌍 Proyectos en 5 idiomas</div>
+    </div>
+</div>
+
+<!-- Generador IA de posts -->
+<div class="container" id="ai-tools">
+    <div class="ai-card">
+        <h2 style="text-align: center;">🤖 Generador IA de Posts</h2>
+        <p style="text-align: center;">Redactá contenido para Instagram y LinkedIn en segundos. Claude AI integrado.</p>
+        <div style="max-width: 700px; margin: 2rem auto;">
+            <label>🔐 API Key Claude (Anthropic)</label>
+            <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-...">
+            <button id="saveKeyBtn" style="background:#334155;">💾 Guardar Key</button>
+            <span id="keyStatus" style="margin-left: 1rem;"></span>
+            <textarea id="topicInput" rows="3" placeholder="Ej: Casa 3 dormitorios 7x10, cocina integrada, terraza, luz natural..."></textarea>
+            <div style="display: flex; gap:1rem; flex-wrap:wrap;">
+                <select id="toneSelect"><option>profesional</option><option>cálido y cercano</option><option>inspirador</option></select>
+                <select id="ctaSelect"><option>Comentá 'PLANO'</option><option>Comentá 'PROYECTO'</option><option>Escribime al DM</option></select>
+                <button id="generateBtn">✨ Generar</button>
+            </div>
+            <div id="errorMsg" style="margin-top: 0.5rem;"></div>
+            <div id="postsResult" style="margin-top: 2rem;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Contacto y Redes -->
+<div class="container" id="contacto">
+    <div class="contact-section">
+        <h2>🌍 ¿Tu próximo proyecto?</h2>
+        <p style="margin: 1rem 0;">Análisis sísmico, hormigón enclavado, steel frame, prefabricado — asesoría global.</p>
+        <div class="social-links">
+            <a href="https://www.instagram.com/arqd.eck/" target="_blank" class="social-icon">📷</a>
+            <a href="https://wa.me/5493425473294" target="_blank" class="social-icon">💬</a>
+            <a href="#" class="social-icon">🔗</a>
+        </div>
+        <p>📞 +54 9 342 5473294 · ✉️ estudio@arqdeck.com</p>
+        <a href="https://wa.me/5493425473294?text=Hola%20ARQD.ECK%20quiero%20empezar%20mi%20proyecto" style="background:#25D366; padding:0.7rem 2rem; border-radius: 3rem; text-decoration: none; color: white; display: inline-block;">📱 WhatsApp directo</a>
+        <p style="margin-top: 2rem;">📍 Argentina · Proyectos en 🇹🇷 🇧🇷 🇺🇸 🇮🇳 🇪🇸</p>
+    </div>
+</div>
+
+<footer>
+    ARQD.ECK · introspective architecture · planos que conectan desde adentro.<br>© 2026 · Todos los derechos reservados
+</footer>
+
+<!-- Botón flotante WhatsApp -->
+<a href="https://wa.me/5493425473294?text=Hola%20ARQD.ECK%20quiero%20mi%20proyecto" class="whatsapp-float" target="_blank">💬</a>
+
+<script>
+    // API key handling and post generation
+    const apiInput = document.getElementById('apiKeyInput');
+    const saveBtn = document.getElementById('saveKeyBtn');
+    const keySpan = document.getElementById('keyStatus');
+    const genBtn = document.getElementById('generateBtn');
+    const topic = document.getElementById('topicInput');
+    const tone = document.getElementById('toneSelect');
+    const cta = document.getElementById('ctaSelect');
+    const postsDiv = document.getElementById('postsResult');
+    const errDiv = document.getElementById('errorMsg');
+
+    const savedKey = localStorage.getItem('claude_api_key');
+    if (savedKey) { apiInput.value = savedKey; keySpan.innerHTML = '✅ key lista'; keySpan.style.color = '#4ade80'; }
+
+    saveBtn.onclick = () => {
+        let k = apiInput.value.trim();
+        if (k.startsWith('sk-ant-api03-') && k.length > 30) {
+            localStorage.setItem('claude_api_key', k);
+            keySpan.innerHTML = '✅ guardada';
+        } else {
+            keySpan.innerHTML = '⚠️ formato inválido';
+        }
+    };
+
+    async function callClaude(prompt) {
+        const key = localStorage.getItem('claude_api_key');
+        if (!key) throw new Error('No API key');
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+                'x-api-key': key,
+                'anthropic-version': '2023-06-01',
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'claude-3-haiku-20240307',
+                max_tokens: 800,
+                temperature: 0.7,
+                messages: [{ role: 'user', content: prompt }]
+            })
+        });
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+        const data = await res.json();
+        return data.content[0].text;
+    }
+
+    genBtn.onclick = async () => {
+        if (!topic.value.trim()) {
+            errDiv.innerHTML = '<span style="color:#f87171;">✏️ Escribí un tema</span>';
+            return;
+        }
+        if (!localStorage.getItem('claude_api_key')) {
+            errDiv.innerHTML = '<span style="color:#f87171;">🔐 Guardá tu API key primero</span>';
+            return;
+        }
+        errDiv.innerHTML = '';
+        postsDiv.innerHTML = '<div>⏳ Generando posts con Claude AI...</div>';
+        const instaPrompt = `Post para Instagram sobre: ${topic.value}. Tono: ${tone.value}. CTA: "${cta.value}". Usá emojis, hashtags y lenguaje cercano. Incluye el concepto de arquitectura introspectiva.`;
+        const liPrompt = `Post para LinkedIn sobre: ${topic.value}. Tono profesional pero cálido. Mencioná arquitectura introspectiva y el valor técnico. CTA: "${cta.value}".`;
+        try {
+            const [insta, linkedin] = await Promise.all([callClaude(instaPrompt), callClaude(liPrompt)]);
+            postsDiv.innerHTML = `
+                <div style="background:#0f172a; padding:1rem; border-radius:1rem; margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between;"><strong>📸 INSTAGRAM</strong> <button onclick="navigator.clipboard.writeText(\`${insta.replace(/`/g, '\\`')}\`)">Copiar</button></div>
+                    <pre style="white-space:pre-wrap; margin-top:0.5rem;">${insta}</pre>
+                </div>
+                <div style="background:#0f172a; padding:1rem; border-radius:1rem;">
+                    <div style="display:flex; justify-content:space-between;"><strong>💼 LINKEDIN</strong> <button onclick="navigator.clipboard.writeText(\`${linkedin.replace(/`/g, '\\`')}\`)">Copiar</button></div>
+                    <pre style="white-space:pre-wrap; margin-top:0.5rem;">${linkedin}</pre>
+                </div>
+            `;
+        } catch (e) {
+            errDiv.innerHTML = `<span style="color:#f87171;">❌ Error: ${e.message}. Revisá saldo en Anthropic.</span>`;
+            postsDiv.innerHTML = '';
+        }
+    };
+</script>
+</body>
+</html>
